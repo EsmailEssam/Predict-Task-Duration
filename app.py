@@ -41,59 +41,59 @@ with tab1:
         except Exception as e:
             st.error(f"Error processing file: {str(e)}")
 
-with tab2:
-    # Rest of the input form code remains the same
-    def existing_task_ids():
-        return st.session_state.tasks["Task ID"].tolist()
+# with tab2:
+#     # Rest of the input form code remains the same
+#     def existing_task_ids():
+#         return st.session_state.tasks["Task ID"].tolist()
     
-    def convert_date(date):
-        return str(datetime.fromisoformat(str(date)).strftime('%d/%m/%Y'))
+#     def convert_date(date):
+#         return str(datetime.fromisoformat(str(date)).strftime('%d/%m/%Y'))
     
-    # Create two equal columns for input fields
-    col1, col2 = st.columns(2)
+#     # Create two equal columns for input fields
+#     col1, col2 = st.columns(2)
 
-    with col1:
-        task_id = st.text_input("Task ID", placeholder='T001')
-        team_size = st.number_input("Team Size", min_value=1, step=1)
-        resource_availability = st.number_input("Resource Availability", min_value=0.0, max_value=1.0, step=0.01)
-        complexity = st.number_input("Complexity", min_value=1, max_value=10, step=1)
-        priority = st.number_input("Priority", min_value=1, max_value=10, step=1)
-        risk = st.number_input("Risk", min_value=0.0, max_value=1.0, step=0.01)
-        environment = st.selectbox("Environment", ["Offshore", "Onshore", "Arctic"])
+#     with col1:
+#         task_id = st.text_input("Task ID", placeholder='T001')
+#         team_size = st.number_input("Team Size", min_value=1, step=1)
+#         resource_availability = st.number_input("Resource Availability", min_value=0.0, max_value=1.0, step=0.01)
+#         complexity = st.number_input("Complexity", min_value=1, max_value=10, step=1)
+#         priority = st.number_input("Priority", min_value=1, max_value=10, step=1)
+#         risk = st.number_input("Risk", min_value=0.0, max_value=1.0, step=0.01)
+#         environment = st.selectbox("Environment", ["Offshore", "Onshore", "Arctic"])
     
-    # with col2:
-    #     dependencies = st.multiselect("Dependencies", existing_task_ids(), [])
-    #     task_duration = st.number_input("Task Duration (Days)", min_value=1, step=1)
-    #     delay = st.number_input("Delay (Days)", min_value=0, step=1)
-    #     start_date = st.date_input("Start Date", format="DD/MM/YYYY")
-    #     end_date = st.date_input("End Date", format="DD/MM/YYYY")
-    #     actual_end_date = st.date_input("Actual End Date", format="DD/MM/YYYY")
+#     with col2:
+#         dependencies = st.multiselect("Dependencies", existing_task_ids(), [])
+#         task_duration = st.number_input("Task Duration (Days)", min_value=1, step=1)
+#         delay = st.number_input("Delay (Days)", min_value=0, step=1)
+#         start_date = st.date_input("Start Date", format="DD/MM/YYYY")
+#         end_date = st.date_input("End Date", format="DD/MM/YYYY")
+#         actual_end_date = st.date_input("Actual End Date", format="DD/MM/YYYY")
 
-    # if st.button("Add Task", use_container_width=True):
-    #     if task_id and task_id not in existing_task_ids():
-    #         new_task = pd.DataFrame({
-    #             "Task ID": [task_id],
-    #             "Team Size": [team_size],
-    #             "Resource Availability": [resource_availability],
-    #             "Complexity": [complexity],
-    #             "Priority": [priority],
-    #             "Risk": [risk],
-    #             "Environment": [environment],
-    #             "Dependencies": [[dependencies]],
-    #             "Task Duration (Days)": [task_duration],
-    #             "Delay (Days)": [delay],
-    #             "Start Date": [convert_date(start_date)],
-    #             "End Date": [convert_date(end_date)],
-    #             "Actual End Date": [convert_date(actual_end_date)]
-    #         })
+#     if st.button("Add Task", use_container_width=True):
+#         if task_id and task_id not in existing_task_ids():
+#             new_task = pd.DataFrame({
+#                 "Task ID": [task_id],
+#                 "Team Size": [team_size],
+#                 "Resource Availability": [resource_availability],
+#                 "Complexity": [complexity],
+#                 "Priority": [priority],
+#                 "Risk": [risk],
+#                 "Environment": [environment],
+#                 "Dependencies": [[dependencies]],
+#                 "Task Duration (Days)": [task_duration],
+#                 "Delay (Days)": [delay],
+#                 "Start Date": [convert_date(start_date)],
+#                 "End Date": [convert_date(end_date)],
+#                 "Actual End Date": [convert_date(actual_end_date)]
+#             })
             
-    #         # Process the new task using TaskDurationPredictor
-    #         processed_task = TaskDurationPredictor(MODEL_PATH, ENVIRONMENT_MAPPING).process_dataframe(new_task)
-    #         st.session_state.tasks = pd.concat([st.session_state.tasks, processed_task], ignore_index=True)
-    #         st.success(f"Task {task_id} added successfully!")
-    #         st.write("Dependencies", dependencies)
-    #     else:
-    #         st.error("Please enter a unique Task ID")
+#             # Process the new task using TaskDurationPredictor
+#             processed_task = TaskDurationPredictor(MODEL_PATH, ENVIRONMENT_MAPPING).process_dataframe(new_task)
+#             st.session_state.tasks = pd.concat([st.session_state.tasks, processed_task], ignore_index=True)
+#             st.success(f"Task {task_id} added successfully!")
+#             st.write("Dependencies", dependencies)
+#         else:
+#             st.error("Please enter a unique Task ID")
 
 # Display the current tasks
 if not st.session_state.tasks.empty:
