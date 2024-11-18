@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
+from datetime import datetime
 from utils.predict_task_duration import TaskDurationPredictor
 from utils.config import MODEL_PATH, ENVIRONMENT_MAPPING
 from utils.llm import ReportGenerator
@@ -16,8 +17,9 @@ st.set_page_config(
 # Initialize session state for tasks
 if "tasks" not in st.session_state:
     st.session_state.tasks = pd.DataFrame(columns=[
-        "Task ID", "Team Size", "Resource Availability", "Complexity", "Priority", "Risk", 
-        "Environment", "Dependencies", "Task Duration (Days)", "Start Date", "Actual End Date"
+        "Task ID", "Team Size", "Resource Availability", "Complexity", "Priority", "Risk",
+        "Environment", "Dependencies", "Expected Total Task Duration", "Predicted Total Task Duration",
+        "Expected Start Date", "Expected End Date", "Predicted Start Date", "Predicted End Date"
     ])
 
 st.title("Task Manager")
@@ -44,6 +46,9 @@ with tab2:
     def existing_task_ids():
         return st.session_state.tasks["Task ID"].tolist()
     
+    def convert_date(date):
+        return str(datetime.fromisoformat(str(date)).strftime('%d/%m/%Y'))
+    
     # Create two equal columns for input fields
     col1, col2 = st.columns(2)
 
@@ -54,13 +59,15 @@ with tab2:
         complexity = st.number_input("Complexity", min_value=1, max_value=10, step=1)
         priority = st.number_input("Priority", min_value=1, max_value=10, step=1)
         risk = st.number_input("Risk", min_value=0.0, max_value=1.0, step=0.01)
+        environment = st.selectbox("Environment", ["Offshore", "Onshore", "Arctic"])
     
     with col2:
-        environment = st.selectbox("Environment", ["Offshore", "Onshore", "Arctic"])
-        dependencies = st.multiselect("Dependencies", existing_task_ids())
+        dependencies = st.multiselect("Dependencies", existing_task_ids(), [])
         task_duration = st.number_input("Task Duration (Days)", min_value=1, step=1)
-        start_date = st.date_input("Start Date")
-        actual_end_date = st.date_input("Actual End Date")
+        delay = st.number_input("Delay (Days)", min_value=0, step=1)
+        start_date = st.date_input("Start Date", format="DD/MM/YYYY")
+        end_date = st.date_input("End Date", format="DD/MM/YYYY")
+        actual_end_date = st.date_input("Actual End Date", format="DD/MM/YYYY")
 
     if st.button("Add Task", use_container_width=True):
         if task_id and task_id not in existing_task_ids():
@@ -72,16 +79,19 @@ with tab2:
                 "Priority": [priority],
                 "Risk": [risk],
                 "Environment": [environment],
-                "Dependencies": [dependencies],
+                "Dependencies": [[dependencies]],
                 "Task Duration (Days)": [task_duration],
-                "Start Date": [start_date],
-                "Actual End Date": [actual_end_date]
+                "Delay (Days)": [delay],
+                "Start Date": [convert_date(start_date)],
+                "End Date": [convert_date(end_date)],
+                "Actual End Date": [convert_date(actual_end_date)]
             })
             
             # Process the new task using TaskDurationPredictor
             processed_task = TaskDurationPredictor(MODEL_PATH, ENVIRONMENT_MAPPING).process_dataframe(new_task)
             st.session_state.tasks = pd.concat([st.session_state.tasks, processed_task], ignore_index=True)
             st.success(f"Task {task_id} added successfully!")
+            st.write("Dependencies", dependencies)
         else:
             st.error("Please enter a unique Task ID")
 

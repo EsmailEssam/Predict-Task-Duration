@@ -179,7 +179,7 @@ class TaskDurationPredictor:
                     "Expected Start Date": row["Start Date"],
                     "Expected End Date": row["Actual End Date"],
                     "Predicted Start Date": start_date,
-                    "Predicted End Date": predicted_end_date,
+                    "Predicted End Date": predicted_end_date
                 }
             )
         logging.info("Successfully processed all tasks")
