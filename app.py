@@ -178,4 +178,4 @@ if not st.session_state.tasks.empty:
         
         st.markdown("---")  # Add a separator line
         # st.subheader("Report")
-        # st.markdown(ReportGenerator().generate_report(st.session_state.tasks))
+        st.markdown(ReportGenerator().generate_report(st.session_state.tasks))
