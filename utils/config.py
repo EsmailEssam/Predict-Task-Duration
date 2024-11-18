@@ -20,4 +20,4 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 MODEL_PATH = "../models/best_model.pkl"
 
 # Encoder mapping for 'Environment'
-ENVIRONMENT_MAPPING = {"Onshore": 0, "Offshore": 1, "Remote": 2}
+ENVIRONMENT_MAPPING = {"Arctic": 0, "Desert": 1, "Onshore": 2, "Offshore": 3}
