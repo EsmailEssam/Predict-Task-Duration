@@ -1,18 +1,25 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
+import logging
+
+# Configure logging
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 
 ######################################## OpenAI ########################################
 # Load environment variables
 load_dotenv(override=True)
 
-# Get OpenAI API key
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-if not OPENAI_API_KEY:
-    raise ValueError("OpenAI API key not found in environment variables")
+try:
+    # Get OpenAI API key
+    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+    # Initialize OpenAI client
+    client = OpenAI(api_key=OPENAI_API_KEY)
 
-# Initialize OpenAI client
-client = OpenAI(api_key=OPENAI_API_KEY)
+except:
+    logging.info("OpenAI API key not found in environment variables")
 
 
 ######################################## variables ########################################
